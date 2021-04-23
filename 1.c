@@ -130,12 +130,39 @@ status Transfer_Graph_To_ArrEdge(GraphPtr G, Edge* edges)
     return TRUE;
 }
 
+int Find(int *parent, int f)
+{
+    while(parent[f]>0)
+    {
+        f = parent[f];
+    }
+    return f;
+}
+
 void MiniSpanTree_Kruskal(GraphPtr G)
 {
-    Edge* e;
-    e = (Edge*)malloc(sizeof(Edge) * G->numedge);
-    Transfer_Graph_To_ArrEdge(G, e);
+    int i, n, m;
+    Edge* edge;
+    int parent[MAXVEX];
+    edge = (Edge*)malloc(sizeof(Edge) * G->numedge);
+    Transfer_Graph_To_ArrEdge(G, edge);
+    for (i = 0; i<G->numvertex; i++)
+    {
+        parent[i] = 0;
+    }
+    printf("kruskal算法的最小生成树过程为:\n");
+    for(i = 0;i<G->numedge;i++)
+    {
+        n = Find(parent,edge[i].begin);
+        m = Find(parent,edge[i].end);
+        if(n!=m)
+        {
+            parent[n] = m;
+            printf("(%d,%d) %d\n", edge[i].begin, edge[i].end,edge[i].weight);
+        }
+    }
 }
+
 
 
 int main(void)
